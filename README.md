@@ -21,6 +21,7 @@ It's commonly used in CTF challenges and as an introduction to classical cryptog
 - Input validation and error handling
 - Deployable to Vercel
 
+## Screenshots
 ### Encrypt Mode
 ![encrypt](screenshots/screenshot1.png)
 
@@ -60,6 +61,9 @@ ShiftyCipher/
 ├── vercel.json         # Vercel deployment config
 ├── .gitignore
 ├── README.md
+├── screenshots/
+│   ├── screenshot1.png
+│   └── screenshot2.png
 └── templates/
     └── index.html      # Frontend UI
 ```
