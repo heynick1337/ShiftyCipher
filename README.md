@@ -21,6 +21,9 @@ It's commonly used in CTF challenges and as an introduction to classical cryptog
 - Input validation and error handling
 - Deployable to Vercel
 
+![encrypt](screenshots/screenshot-1.png)
+![decrypt](screenshots/screenshot-2.png)
+
 ---
 
 ## Setup
