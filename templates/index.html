@@ -3,103 +3,261 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shifty Cipher Encryption</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>ShiftyCipher — Caesar Cipher Tool</title>
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
+
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #000;
+            font-family: Arial, sans-serif;
+            background: #0d0d0d;
             color: #fff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .container {
-            max-width: 500px;
-            background: #1e1e1e;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
-            text-align: center;
-        }
-        form {
             display: flex;
             flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
         }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            background: #1a1a1a;
+            padding: 28px 24px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+        }
+
         h1 {
+            font-size: 1.6rem;
             color: #ffcc00;
-            font-size: 2.5em;
-            margin-bottom: 20px;
+            margin-bottom: 4px;
         }
+
+        .subtitle {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 22px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #2a2a2a;
+        }
+
         label {
-            margin: 15px 0 5px;
-            font-weight: bold;
-            color: #ccc;
+            font-size: 13px;
+            color: #aaa;
+            display: block;
+            margin-bottom: 6px;
+            margin-top: 14px;
         }
-        textarea, input[type="number"] {
+
+        textarea,
+        input[type="number"] {
+            width: 100%;
+            padding: 11px 12px;
+            font-size: 14px;
+            border: 1px solid #333;
+            border-radius: 8px;
+            background: #242424;
+            color: #fff;
+            outline: none;
+            transition: border-color 0.2s;
+            resize: vertical;
+        }
+
+        textarea {
+            min-height: 90px;
+        }
+
+        textarea:focus,
+        input[type="number"]:focus {
+            border-color: #ffcc00;
+        }
+
+        textarea::placeholder,
+        input::placeholder {
+            color: #555;
+        }
+
+        /* Mode toggle */
+        .mode-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .mode-btn {
+            flex: 1;
+            padding: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            border: 1px solid #333;
+            border-radius: 8px;
+            background: #242424;
+            color: #888;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .mode-btn.active {
+            background: #ffcc00;
+            color: #000;
+            border-color: #ffcc00;
+        }
+
+        button[type="submit"] {
             width: 100%;
             padding: 12px;
-            margin-bottom: 15px;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            background: #2c2c2c;
-            color: #fff;
-        }
-        textarea:focus, input[type="number"]:focus {
-            outline: 2px solid #ffcc00;
-            box-shadow: 0 0 10px #ffcc00;
-        }
-        button {
-            width: 100%;
-            padding: 15px;
+            margin-top: 18px;
+            font-size: 15px;
+            font-weight: 700;
+            background: #ffcc00;
             color: #000;
             border: none;
             border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
             cursor: pointer;
-            background-color: #ffcc00;
-            transition: transform 0.2s, box-shadow 0.3s;
+            transition: opacity 0.2s;
         }
-        button:hover {
-            color: #ffcc00;
-            outline: 2px solid #ffcc00;
-            background-color: transparent;
+
+        button[type="submit"]:hover {
+            opacity: 0.85;
         }
-        h2 {
-            margin: 20px;
-            font-size: 1.5em;
-        }
-        p {
-            background: #1b1b1b;
-            padding: 15px;
+
+        .result {
+            margin-top: 20px;
+            padding: 14px;
+            background: #111;
+            border: 1px solid #2a2a2a;
             border-radius: 8px;
-            color: #0ad2e4;
-            font-size: 1.1em;
+        }
+
+        .result-label {
+            font-size: 11px;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 8px;
+        }
+
+        .result-value {
+            font-size: 14px;
+            color: #ffcc00;
+            word-break: break-all;
+            font-family: 'Courier New', monospace;
+            line-height: 1.5;
+        }
+
+        .copy-btn {
+            background: none;
+            border: 1px solid #333;
+            color: #888;
+            font-size: 12px;
+            padding: 5px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        .copy-btn:hover {
+            border-color: #555;
+            color: #aaa;
+        }
+
+        .error {
+            margin-top: 14px;
+            padding: 10px 14px;
+            background: #1a0000;
+            border: 1px solid #440000;
+            border-radius: 8px;
+            color: #ff6b6b;
+            font-size: 13px;
+        }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #444;
+            text-align: center;
+        }
+
+        .footer a {
+            color: #555;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            color: #888;
         }
     </style>
 </head>
 <body>
+
     <div class="container">
-        <h1>Shifty Cipher Encryption</h1>
-        <form method="POST">
-            <label for="text">Text to Encrypt:</label>
-            <textarea id="text" name="text" required></textarea>
-            <label for="shift">Shift Amount:</label>
-            <input type="number" id="shift" name="shift" required>
-            <button type="submit">Encrypt</button>
+        <h1>ShiftyCipher</h1>
+        <div class="subtitle">Caesar cipher — encrypt &amp; decrypt text</div>
+
+        <form method="POST" id="cipherForm">
+
+            <label for="text">Input Text</label>
+            <textarea id="text" name="text" placeholder="Enter text here...">{{ text }}</textarea>
+
+            <label for="shift">Shift Amount (0–25)</label>
+            <input type="number" id="shift" name="shift" placeholder="e.g. 3" min="0" max="25" value="{{ shift if shift != '' else '' }}" />
+
+            <div style="margin-top:14px;">
+                <label style="margin-top:0">Mode</label>
+                <div class="mode-row">
+                    <button type="button" class="mode-btn {% if mode == 'encrypt' %}active{% endif %}"
+                        onclick="setMode('encrypt')">Encrypt</button>
+                    <button type="button" class="mode-btn {% if mode == 'decrypt' %}active{% endif %}"
+                        onclick="setMode('decrypt')">Decrypt</button>
+                </div>
+                <input type="hidden" name="mode" id="modeInput" value="{{ mode }}" />
+            </div>
+
+            <button type="submit">Run</button>
         </form>
-        {% if encrypted_text %}
-        <h2>Encrypted Text:</h2>
-        <p>{{ encrypted_text }}</p>
+
+        {% if error %}
+        <div class="error">{{ error }}</div>
+        {% endif %}
+
+        {% if result %}
+        <div class="result">
+            <div class="result-label">Output</div>
+            <div class="result-value" id="resultOutput">{{ result }}</div>
+            <button class="copy-btn" onclick="copyResult()">Copy</button>
+        </div>
         {% endif %}
     </div>
+
+    <div class="footer">
+        Built by
+        <a href="https://github.com/heynick1337" target="_blank">Nikhil Sahu</a>
+        &nbsp;·&nbsp;
+        <a href="https://linkedin.com/in/sahunikhil01" target="_blank">LinkedIn</a>
+    </div>
+
+    <script>
+        function setMode(mode) {
+            document.getElementById('modeInput').value = mode;
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function copyResult() {
+            const text = document.getElementById('resultOutput').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                btn.textContent = 'Copied!';
+                setTimeout(() => { btn.textContent = 'Copy'; }, 1500);
+            });
+        }
+    </script>
+
 </body>
 </html>
